@@ -6,12 +6,12 @@
 //
 
 import Foundation
-
+// MARK: - Example Print
 func example(of example: String, block: () -> Void){
     print("-- Example of \(example) --")
     block()
 }
-
+// MARK: - Queue
 public protocol Queue {
     associatedtype Element
     mutating func enqueue(_ element:Element) -> Bool
@@ -19,7 +19,7 @@ public protocol Queue {
     var isEmpty: Bool { get }
     var peek: Element? { get }
 }
-
+// MARK: - RingBuffer
 public struct RingBuffer<T>{
     fileprivate var array: [T?]
     fileprivate var readIndex = 0
@@ -28,6 +28,7 @@ public struct RingBuffer<T>{
     public init(count: Int){
         array = [T?](repeating: nil, count: count)
     }
+    
     @discardableResult
     public mutating func write(_ element: T?) -> Bool{
         if !isFull{
@@ -49,7 +50,6 @@ public struct RingBuffer<T>{
         }
     }
 
-    
     fileprivate var availableSpaceForReading: Int{
         return writeIndex - readIndex
     }
@@ -78,7 +78,7 @@ extension RingBuffer : CustomStringConvertible {
     }
 }
 
-
+// MARK: QueueRingBuffer
 public struct QueueRingBuffer<T>: Queue {
     private var ringBuffer: RingBuffer<T>
     
@@ -105,8 +105,6 @@ public struct QueueRingBuffer<T>: Queue {
     public init(count:Int){
         ringBuffer = RingBuffer<T>(count:count)
     }
-    
-    
 }
 
 extension QueueRingBuffer: CustomStringConvertible {
@@ -115,25 +113,23 @@ extension QueueRingBuffer: CustomStringConvertible {
     }
 }
 
-
 example(of: "Implementing a Ring Buffer") {
-    var queue = QueueRingBuffer<Int>(count: 10)
+    var queue = QueueRingBuffer<Int>(count: 13)
+    queue.enqueue(1)
+    print("Peek",queue.peek!)
     queue.enqueue(2)
-    print("Peek",queue.peek!)
+    queue.enqueue(3)
+    print("Dequeue",queue.dequeue())
+    print("Dequeue",queue.dequeue())
+    queue.enqueue(4)
     queue.enqueue(5)
-    queue.enqueue(10)
-    print("Dequeue",queue.dequeue()!)
-    print("Dequeue",queue.dequeue()!)
-    queue.enqueue(10)
-    queue.enqueue(15)
-    queue.enqueue(10)
-    queue.enqueue(15)
-    queue.enqueue(10)
+    queue.enqueue(6)
+    queue.enqueue(7)
+    queue.enqueue(8)
+    queue.enqueue(13)
     print("Peek",queue.peek!)
-    queue.enqueue(15)
-    print("Dequeue",queue.dequeue()!)
-    print("Dequeue",queue.dequeue()!)
-    print("Dequeue",queue.dequeue()!)
+    queue.enqueue(14)
+    print("Dequeue",queue.dequeue())
     print("Peek",queue.peek!)
     print(queue.description)
 }
