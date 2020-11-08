@@ -4,7 +4,7 @@ This implement the Ring Buffer with a Queue of elements.
 
 The idea is that we create an array of "fixed" size.
 The write pointer and the read pointer are updated upon using.
-The ring portion is implemented by reading and writing using the modulus from the pointer and the `array.count`.
+The ring portion is implemented by reading and writing using the modulo from the pointer and the `array.count`.
 
 example:
 
